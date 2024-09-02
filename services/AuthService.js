@@ -4,9 +4,8 @@ import { User } from "../models/User.js";
 class AuthService {
   static async register(data) {
     const user = await User.create(data);
-
-    const accessToken = this.generateTokens(user._id, "access");
-    const refreshToken = this.generateTokens(user._id, "refresh");
+    const accessToken = this.#generateTokens(user._id, "access");
+    const refreshToken = this.#generateTokens(user._id, "refresh");
 
     return { username: user.username, accessToken, refreshToken };
   }
@@ -20,9 +19,9 @@ class AuthService {
 
     if (!isPasswordCorrect) throw new Error("Password invalid!");
 
-    const accessToken = this.generateTokens(user._id, "access");
+    const accessToken = this.#generateTokens(user._id, "access");
 
-    const refreshToken = this.generateTokens(user._id, "refresh");
+    const refreshToken = this.#generateTokens(user._id, "refresh");
 
     return { username: userAccount.username, accessToken, refreshToken };
   }
@@ -35,12 +34,12 @@ class AuthService {
     if (!isCurrentTokenValid) throw new Error("Token is invalid!");
 
     const currentToken = jwt.decode(currToken);
-    const token = this.generateTokens(currentToken.user_id, "access");
+    const token = this.#generateTokens(currentToken.user_id, "access");
 
     return token;
   }
 
-  generateTokens(user_id, type) {
+  static #generateTokens(user_id, type) {
     switch (type) {
       case "access":
         return jwt.sign({ user_id: user_id }, process.env.JWT_ACCESS_SECRET, {

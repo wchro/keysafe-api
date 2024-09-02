@@ -7,9 +7,9 @@ class UserController {
 
     try {
       const info = await UserService.getInfo(req.body);
-      return res.json(info);
+      return res.json({ success: true, ...info });
     } catch (error) {
-      return res.status(403).json({ msg: error.toString() });
+      return res.status(403).json({ success: false, msg: error.toString() });
     }
   }
 }

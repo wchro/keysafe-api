@@ -4,54 +4,66 @@ import PasswordService from "../services/PasswordService.js";
 class PasswordController {
   static async getPasswords(req, res, next) {
     if (!req.rawHeaders.includes("content-type"))
-      return res.status(400).json({ msg: "Make sure to set the Content-Type" });
+      return res
+        .status(400)
+        .json({ success: false, msg: "Make sure to set the Content-Type" });
 
     try {
       const items = await PasswordService.getPasswords(req.body);
-      return res.json({ items: items });
+      return res.json({ success: true, items: items });
     } catch (error) {
-      return res.status(403).json({ msg: error.toString() });
+      return res.status(403).json({ success: false, msg: error.toString() });
     }
   }
   static async createPassword(req, res, next) {
     if (!req.rawHeaders.includes("content-type"))
-      return res.status(400).json({ msg: "Make sure to set the Content-Type" });
+      return res
+        .status(400)
+        .json({ success: false, msg: "Make sure to set the Content-Type" });
 
     try {
       const result = passwordSchema.safeParse(req.body);
-      if (result.error) return res.status(400).json({ msg: result.error });
+      if (result.error)
+        return res.status(400).json({ success: false, msg: result.error });
 
       const item = await PasswordService.createPassword(result.data);
-      return res.status(201).json("New item added successfully!");
+      return res
+        .status(201)
+        .json({ success: true, msg: "New item added successfully!" });
     } catch (error) {
-      return res.status(403).json({ msg: error.toString() });
+      return res.status(403).json({ success: false, msg: error.toString() });
     }
   }
 
   static async update(req, res, next) {
     if (!req.rawHeaders.includes("content-type"))
-      return res.status(400).json({ msg: "Make sure to set the Content-Type" });
+      return res
+        .status(400)
+        .json({ success: false, msg: "Make sure to set the Content-Type" });
 
     try {
       const result = passwordSchema.optional(req.body);
-      if (result.error) return res.status(400).json({ msg: result.error });
+      if (result.error)
+        return res.status(400).json({ success: false, msg: result.error });
 
       const item = await PasswordService.createPassword(result.data);
-      return res.json({ msg: "Item successfully updated" });
+      return res.json({ success: true, msg: "Item successfully updated" });
     } catch (error) {
-      return res.status(403).json({ msg: error.toString() });
+      return res.status(403).json({ success: false, msg: error.toString() });
     }
   }
 
   static async delete(req, res, next) {
     if (!req.rawHeaders.includes("content-type"))
-      return res.status(400).json({ msg: "Make sure to set the Content-Type" });
+      return res
+        .status(400)
+        .json({ success: false, msg: "Make sure to set the Content-Type" });
 
     try {
       const items = await PasswordService.delete(req.body);
-      return res.json({ msg: "Item successfully deleted" });
+      return res.json({ success: true, msg: "Item successfully deleted" });
     } catch (error) {
-      return res.status(403).json({ msg: error.toString() });
+      return res.status(403).json({ success: false, msg: error.toString() });
     }
   }
 }

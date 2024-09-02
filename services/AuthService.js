@@ -16,10 +16,23 @@ class AuthService {
 
     if (!isPasswordCorrect) throw new Error("Password invalid!");
 
-    const token = jwt.sign({ user_id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    return token;
+    const accessToken = jwt.sign(
+      { user_id: user._id },
+      process.env.JWT_ACCESS_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      { user_id: user._id },
+      process.env.JWT_REFRESH_SECRET,
+      {
+        expiresIn: "1m",
+      }
+    );
+
+    return { username: userAccount.username, accessToken, refreshToken };
   }
 
   static async refreshToken({ currToken }) {

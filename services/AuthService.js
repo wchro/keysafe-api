@@ -7,7 +7,7 @@ class AuthService {
     const accessToken = this.#generateTokens(user._id, "access");
     const refreshToken = this.#generateTokens(user._id, "refresh");
 
-    return { username: user.username, accessToken, refreshToken };
+    return { username: user.username, accessToken, refreshToken, data: user };
   }
 
   static async login({ username, password }) {

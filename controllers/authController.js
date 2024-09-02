@@ -16,7 +16,11 @@ class AuthController {
       const user = await AuthService.register(result.data);
       return res
         .status(201)
-        .json({ success: true, msg: "Account has been successfully created!" });
+        .json({
+          success: true,
+          msg: "Account has been successfully created!",
+          ...user,
+        });
     } catch (error) {
       return res.status(409).json({ success: false, msg: error.toString() });
     }

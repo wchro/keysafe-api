@@ -4,7 +4,11 @@ import { User } from "../models/User.js";
 class AuthService {
   static async register(data) {
     const user = await User.create(data);
-    return user;
+
+    const accessToken = this.generateTokens(user._id, "access");
+    const refreshToken = this.generateTokens(user._id, "refresh");
+
+    return { username: user.username, accessToken, refreshToken };
   }
 
   static async login({ username, password }) {
@@ -16,40 +20,37 @@ class AuthService {
 
     if (!isPasswordCorrect) throw new Error("Password invalid!");
 
-    const accessToken = jwt.sign(
-      { user_id: user._id },
-      process.env.JWT_ACCESS_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const accessToken = this.generateTokens(user._id, "access");
 
-    const refreshToken = jwt.sign(
-      { user_id: user._id },
-      process.env.JWT_REFRESH_SECRET,
-      {
-        expiresIn: "1m",
-      }
-    );
+    const refreshToken = this.generateTokens(user._id, "refresh");
 
     return { username: userAccount.username, accessToken, refreshToken };
   }
 
   static async refreshToken({ currToken }) {
-    const isCurrentTokenValid = jwt.verify(currToken, process.env.JWT_SECRET);
+    const isCurrentTokenValid = jwt.verify(
+      currToken,
+      process.env.JWT_ACCESS_SECRET
+    );
     if (!isCurrentTokenValid) throw new Error("Token is invalid!");
 
     const currentToken = jwt.decode(currToken);
-    console.log(currentToken);
-    const token = jwt.sign(
-      { user_id: currentToken.user_id },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const token = this.generateTokens(currentToken.user_id, "access");
 
     return token;
+  }
+
+  generateTokens(user_id, type) {
+    switch (type) {
+      case "access":
+        return jwt.sign({ user_id: user_id }, process.env.JWT_ACCESS_SECRET, {
+          expiresIn: "1d",
+        });
+      case "refresh":
+        return jwt.sign({ user_id: user_id }, process.env.JWT_REFRESH_SECRET, {
+          expiresIn: "1m",
+        });
+    }
   }
 }
 

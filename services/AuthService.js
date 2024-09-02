@@ -4,10 +4,10 @@ import { User } from "../models/User.js";
 class AuthService {
   static async register(data) {
     const user = await User.create(data);
-    const accessToken = this.#generateTokens(user._id, "access");
-    const refreshToken = this.#generateTokens(user._id, "refresh");
+    const accessToken = this.#generateTokens(user.insertedId, "access");
+    const refreshToken = this.#generateTokens(user.insertedId, "refresh");
 
-    return { username: user.username, accessToken, refreshToken, data: user };
+    return { user: user.insertedId, accessToken, refreshToken };
   }
 
   static async login({ username, password }) {
@@ -23,7 +23,7 @@ class AuthService {
 
     const refreshToken = this.#generateTokens(user._id, "refresh");
 
-    return { username: userAccount.username, accessToken, refreshToken };
+    return { user: user._id, accessToken, refreshToken };
   }
 
   static async refreshToken({ currToken }) {

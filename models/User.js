@@ -21,9 +21,7 @@ export class User {
     const user = new User(username, email, hashedPassword);
 
     const db = await Database.getDB();
-    const result = await db
-      .collection("users")
-      .insertOne(user, (error, response) => response.ops[0]);
+    const result = await db.collection("users").insertOne(user);
 
     return result;
   }

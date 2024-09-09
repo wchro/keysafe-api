@@ -26,7 +26,7 @@ class AuthService {
     return { user: user._id, accessToken, refreshToken };
   }
 
-  static async refreshToken({ currToken }) {
+  static async refreshToken(currToken) {
     const isCurrentTokenValid = jwt.verify(
       currToken,
       process.env.JWT_ACCESS_SECRET

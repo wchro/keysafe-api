@@ -14,13 +14,11 @@ class AuthController {
         return res.status(400).json({ success: false, msg: result.error });
 
       const user = await AuthService.register(result.data);
-      return res
-        .status(201)
-        .json({
-          success: true,
-          msg: "Account has been successfully created!",
-          ...user,
-        });
+      return res.status(201).json({
+        success: true,
+        msg: "Account has been successfully created!",
+        ...user,
+      });
     } catch (error) {
       return res.status(409).json({ success: false, msg: error.toString() });
     }
@@ -45,7 +43,7 @@ class AuthController {
         .json({ success: false, msg: "Make sure to set the Content-Type" });
 
     try {
-      const token = await AuthService.refreshToken(req.body);
+      const token = await AuthService.refreshToken(req.headers.authorization);
       return res.status(200).json({ success: true, token: token });
     } catch (error) {
       return res.status(403).json({ success: false, msg: error.toString() });

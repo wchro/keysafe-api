@@ -29,7 +29,7 @@ class AuthService {
   static async refreshToken(currToken) {
     const isCurrentTokenValid = jwt.verify(
       currToken,
-      process.env.JWT_ACCESS_SECRET
+      process.env.JWT_REFRESH_SECRET
     );
     if (!isCurrentTokenValid) throw new Error("Token is invalid!");
 

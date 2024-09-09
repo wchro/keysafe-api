@@ -48,7 +48,10 @@ class AuthController {
       );
       return res.status(200).json({ success: true, token: token });
     } catch (error) {
-      return res.status(403).json({ success: false, msg: error.toString() });
+      const oldToken = req.headers.authorization.split(" ")[1];
+      return res
+        .status(403)
+        .json({ success: false, msg: error.toString(), oldToken });
     }
   }
 }

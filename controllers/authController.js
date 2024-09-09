@@ -43,7 +43,9 @@ class AuthController {
         .json({ success: false, msg: "Make sure to set the Content-Type" });
 
     try {
-      const token = await AuthService.refreshToken(req.headers.authorization);
+      const token = await AuthService.refreshToken(
+        req.headers.authorization.split(" ")[1]
+      );
       return res.status(200).json({ success: true, token: token });
     } catch (error) {
       return res.status(403).json({ success: false, msg: error.toString() });

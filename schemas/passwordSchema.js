@@ -5,7 +5,6 @@ const passwordSchema = z.object({
   account: z.string(),
   password: z.string(),
   site: z.string(),
-  accessToken: z.string(),
 });
 
 export default passwordSchema;

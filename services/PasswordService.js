@@ -11,7 +11,7 @@ class PasswordService {
     const items = await Password.getAll(user_id);
     return items;
   }
-  static async createPassword({ name, account, password, site, accessToken }) {
+  static async createPassword({ name, account, password, site }, accessToken) {
     const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 
@@ -21,7 +21,7 @@ class PasswordService {
     return item;
   }
 
-  static async update({ item_id, name, account, password, site, accessToken }) {
+  static async update({ item_id, name, account, password, site }, accessToken) {
     const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 
@@ -38,7 +38,7 @@ class PasswordService {
     return items;
   }
 
-  static async delete({ item_id, accessToken }) {
+  static async delete({ item_id }, accessToken) {
     const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 

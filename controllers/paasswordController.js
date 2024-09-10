@@ -27,7 +27,8 @@ class PasswordController {
       if (result.error)
         return res.status(400).json({ success: false, msg: result.error });
 
-      const item = await PasswordService.createPassword(result.data);
+      const token = req.headers.authorization.split(" ")[1];
+      const item = await PasswordService.createPassword(result.data, token);
       return res
         .status(201)
         .json({ success: true, msg: "New item added successfully!" });

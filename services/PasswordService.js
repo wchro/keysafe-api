@@ -3,7 +3,7 @@ import { Password } from "../models/Password.js";
 
 class PasswordService {
   static async getPasswords(accessToken) {
-    const isTokenValid = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 
     const { user_id } = jwt.decode(accessToken);
@@ -12,7 +12,7 @@ class PasswordService {
     return items;
   }
   static async createPassword({ name, account, password, site, accessToken }) {
-    const isTokenValid = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 
     const { user_id } = jwt.decode(accessToken);
@@ -22,7 +22,7 @@ class PasswordService {
   }
 
   static async update({ item_id, name, account, password, site, accessToken }) {
-    const isTokenValid = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 
     const { user_id } = jwt.decode(accessToken);
@@ -39,7 +39,7 @@ class PasswordService {
   }
 
   static async delete({ item_id, accessToken }) {
-    const isTokenValid = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 
     const { user_id } = jwt.decode(accessToken);

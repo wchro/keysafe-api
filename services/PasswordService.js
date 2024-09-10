@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { Password } from "../models/Password.js";
 
 class PasswordService {
-  static async getPasswords({ accessToken }) {
+  static async getPasswords(accessToken) {
     const isTokenValid = jwt.verify(accessToken, process.env.JWT_SECRET);
     if (!isTokenValid) throw new Error("Invalid access token!");
 

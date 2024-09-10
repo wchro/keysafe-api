@@ -9,7 +9,8 @@ class PasswordController {
         .json({ success: false, msg: "Make sure to set the Content-Type" });
 
     try {
-      const items = await PasswordService.getPasswords(req.body);
+      const token = req.headers.authorization.split(" ")[1];
+      const items = await PasswordService.getPasswords(token);
       return res.json({ success: true, items: items });
     } catch (error) {
       return res.status(403).json({ success: false, msg: error.toString() });

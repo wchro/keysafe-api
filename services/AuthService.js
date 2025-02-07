@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { generateHex } from "../utils/generateHex.js";
 
 class AuthService {
   static async register(data) {
@@ -14,16 +15,31 @@ class AuthService {
     const user = await User.findByUsername(username);
     if (!user) throw new Error("User not found");
 
-    const userAccount = new User(user.username, user.email, user.password);
+    const userAccount = new User(
+      user.username,
+      user.email,
+      user.password,
+      user.salt,
+      user.masterKey
+    );
     const isPasswordCorrect = await userAccount.checkPassword(password);
 
     if (!isPasswordCorrect) throw new Error("Password invalid!");
 
     const accessToken = this.#generateTokens(user._id, "access");
-
     const refreshToken = this.#generateTokens(user._id, "refresh");
 
-    return { user: user._id, accessToken, refreshToken };
+    const masterKey = user.masterKey;
+
+    return { user: user._id, accessToken, refreshToken, masterKey };
+  }
+
+  static async prelogin({ username }) {
+    const user = await User.findByUsername(username);
+    // happy hacking - return a random salt if the user doesn't exist
+    return {
+      salt: user.salt ?? generateHex(crypto.getRandomValues(new uInt8Array())),
+    };
   }
 
   static async refreshToken(currToken) {
@@ -50,6 +66,12 @@ class AuthService {
           expiresIn: "1m",
         });
     }
+  }
+
+  static async isValidArgon2Hash(hash) {
+    const argon2Regex =
+      /^\$argon2(id|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+={0,2}\$[A-Za-z0-9+/]+={0,2}$/;
+    return argon2Regex.test(hash);
   }
 }
 

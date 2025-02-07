@@ -36,6 +36,18 @@ class AuthController {
     }
   }
 
+  static async prelogin(req, res, next) {
+    if (!req.rawHeaders.includes("content-type"))
+      return res.status(400).json({ msg: "Make sure to set the Content-Type" });
+
+    try {
+      const user = await AuthService.prelogin(req.body);
+      return res.json({ success: true, ...user });
+    } catch (error) {
+      return res.status(409).json({ success: false, msg: error.toString() });
+    }
+  }
+
   static async refreshToken(req, res, next) {
     if (!req.rawHeaders.includes("content-type"))
       return res

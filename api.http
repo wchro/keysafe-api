@@ -1,0 +1,17 @@
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+    "username": "encryptffs",
+    "email": "pwfned@gmail.cofms",
+    "password": "$argon2id$v=19$m=16,t=2,p=1$MTIzNDU2Nzg$M8qom/+nQghXhYJv/pS7xA"
+}
+
+### Login
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+    "username": "encryptffs",
+    "password": "$argon2id$v=19$m=16,t=2,p=1$MTIzNDU2Nzg$M8qom/+nQghXhYJv/pS7xA"
+}

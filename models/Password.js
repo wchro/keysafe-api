@@ -4,8 +4,8 @@ import Database from "../utils/db.js";
 export class Password {
   constructor(name, account, password, site, user_id) {
     this.name = name;
-    this.account = btoa(account);
-    this.password = btoa(password);
+    this.account = account;
+    this.password = password;
     this.site = site;
     this.createdAt = new Date().valueOf();
     this.updatedAt = new Date().valueOf();

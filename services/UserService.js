@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 class UserService {
   static async getInfo(accessToken) {
-    const isTokenValid = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const isTokenValid = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     if (!isTokenValid) throw new Error("User not authenticated");
 
     const token = jwt.decode(accessToken);

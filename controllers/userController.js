@@ -6,7 +6,8 @@ class UserController {
       return res.status(400).json({ msg: "Make sure to set the Content-Type" });
 
     try {
-      const info = await UserService.getInfo(req.body);
+      const token = req.headers.authorization.split(" ")[1];
+      const info = await UserService.getInfo(token);
       return res.json({ success: true, ...info });
     } catch (error) {
       return res.status(403).json({ success: false, msg: error.toString() });

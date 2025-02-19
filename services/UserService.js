@@ -2,7 +2,7 @@ import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 class UserService {
-  static async getInfo({ accessToken }) {
+  static async getInfo(accessToken) {
     const isTokenValid = jwt.verify(accessToken, process.env.JWT_SECRET);
     if (!isTokenValid) throw new Error("User not authenticated");
 
